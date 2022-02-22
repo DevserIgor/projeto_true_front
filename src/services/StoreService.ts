@@ -8,16 +8,16 @@ export interface StoreDTO {
 
 export const getData = async (page = 1, pageSize = 10000) => {
   try {
-    const response = await api.get(`/store/`);
+    const response = await api.get(`/stores/`);
     return response.data;
   } catch (error) {
-    // if (error.response) {
-    //   throw error.response.data;
-    // } else if (error.data) {
-    //   throw error.data;
-    // } else {
-    //   throw [{ message: `Ocorreu um erro: ${error}` }];
-    // }
+    if (error.response) {
+      throw error.response.data;
+    } else if (error.data) {
+      throw error.data;
+    } else {
+      throw [{ message: `Ocorreu um erro: ${error}` }];
+    }
   }
 };
 // };
