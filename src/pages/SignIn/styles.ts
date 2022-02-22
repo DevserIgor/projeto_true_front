@@ -37,7 +37,7 @@ export const Form = styled.form`
 
     border-radius: 10px;
 
-    background-color: ${props => props.theme.colors.tertiary};
+    background-color: ${props => props.theme.colors.secondary};
 `;
 
 export const FormTitle = styled.h1`
@@ -49,7 +49,7 @@ export const FormTitle = styled.h1`
         content: '';
         display: block;
         width: 55px;
-        border-bottom: 10px solid ${props => props.theme.colors.warning};  
+        border-bottom: 10px solid ${props => props.theme.colors.green};  
     }
 `;
 

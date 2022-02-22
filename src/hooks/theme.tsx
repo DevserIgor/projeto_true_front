@@ -9,21 +9,24 @@ interface IThemeContext {
 }
 
 interface ITheme {
-    title: string;
+  title: string;
 
-    colors: {
-        primary: string;
-        secondary: string;
-        tertiary: string;
+  colors: {
+    primary: string;
+    secondary: string;
+    tertiary: string;
 
-        white: string;
-        black: string;
-        gray: string;
+    white: string;
+    black: string;
+    gray: string;
 
-        success: string;
-        info: string;
-        warning: string;
-    }
+    green: string;
+    green30perc: string;
+
+    success: string;
+    info: string;
+    warning: string;
+  };
 }
 
 const ThemeContext = createContext<IThemeContext>({} as IThemeContext);

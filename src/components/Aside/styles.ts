@@ -73,7 +73,7 @@ export const MenuContainer = styled.nav`
 `;
 
 export const MenuItemLink = styled.a`
-    color: ${props => props.theme.colors.info};
+    color: ${props => props.theme.colors.green};
     text-decoration: none;
 
     margin: 7px 0;
@@ -96,7 +96,7 @@ export const MenuItemLink = styled.a`
 
 export const MenuItemButton = styled.button`
     font-size: 16px;
-    color: ${props => props.theme.colors.info};
+    color: ${props => props.theme.colors.green};
     
     border: none;
     background: none;

@@ -2,13 +2,15 @@ import React, {useState} from 'react';
 import Toggle from '../Toggle';
 
 import {
-    MdDashboard,
-    MdArrowDownward,
-    MdArrowUpward,
-    MdExitToApp,
-    MdClose,
-    MdMenu, 
-} from 'react-icons/md';
+  MdDashboard,
+  MdArrowDownward,
+  MdArrowUpward,
+  MdExitToApp,
+  MdOutlineAssessment,
+  MdClose,
+  MdMenu,
+  MdBusiness,
+} from "react-icons/md";
 
 import logoImg from '../../assets/logo.svg';
 
@@ -47,47 +49,47 @@ const Aside: React.FC = () => {
 
 
     return (
-        <Container menuIsOpen={toggleMenuIsOpened}>
-            <Header>
-                <ToggleMenu onClick={handleToggleMenu}>
-                { toggleMenuIsOpened ? <MdClose /> : <MdMenu /> }
-                </ToggleMenu>
+      <Container menuIsOpen={toggleMenuIsOpened}>
+        <Header>
+          <ToggleMenu onClick={handleToggleMenu}>
+            {toggleMenuIsOpened ? <MdClose /> : <MdMenu />}
+          </ToggleMenu>
 
-                <LogImg src={logoImg} alt="Logo Minha Carteira" />
-                <Title>Minha Carteira</Title>
-            </Header>
+          <LogImg src={logoImg} alt="Logo Minha Carteira" />
+          <Title>True Ecommerce</Title>
+        </Header>
 
-            <MenuContainer>
-                <MenuItemLink href="/">
-                    <MdDashboard />
-                    Dashboard
-                </MenuItemLink>
+        <MenuContainer>
+          <MenuItemLink href="/">
+            <MdDashboard />
+            Dashboard
+          </MenuItemLink>
 
-                <MenuItemLink href="/list/entry-balance">
-                    <MdArrowUpward />
-                    Entradas
-                </MenuItemLink>
+          <MenuItemLink href="/list/empresas">
+            <MdBusiness />
+            Empresas
+          </MenuItemLink>
 
-                <MenuItemLink href="/list/exit-balance">
-                    <MdArrowDownward />
-                    Saídas
-                </MenuItemLink>
+          <MenuItemLink href="/list/avaliacoes">
+            <MdOutlineAssessment />
+            Avaliações
+          </MenuItemLink>
 
-                <MenuItemButton onClick={signOut}>
-                    <MdExitToApp />
-                    Sair
-                </MenuItemButton>
-            </MenuContainer>
+          <MenuItemButton onClick={signOut}>
+            <MdExitToApp />
+            Sair
+          </MenuItemButton>
+        </MenuContainer>
 
-            <ThemeToggleFooter menuIsOpen={toggleMenuIsOpened}>
-                <Toggle
-                    labelLeft="Light"
-                    labelRight="Dark"
-                    checked={darkTheme}
-                    onChange={handleChangeTheme}
-                />
-            </ThemeToggleFooter>
-        </Container>
+        <ThemeToggleFooter menuIsOpen={toggleMenuIsOpened}>
+          <Toggle
+            labelLeft="Light"
+            labelRight="Dark"
+            checked={darkTheme}
+            onChange={handleChangeTheme}
+          />
+        </ThemeToggleFooter>
+      </Container>
     );
 }
 

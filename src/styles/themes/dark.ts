@@ -9,8 +9,10 @@ export default {
     white: "#FFF",
     black: "#000",
     gray: "#BFBFBF",
+
     green: "#08f036",
     green30perc: "#08f0364c",
+    
 
     success: "#4E41F0",
     info: "#F7931B",
