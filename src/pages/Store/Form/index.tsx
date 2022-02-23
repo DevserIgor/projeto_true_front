@@ -41,6 +41,7 @@ export default function Form({ data, onConfirm, onCancel }: IFormProps) {
       <Row>
         <FormGroup>
           <Input
+            label="Empresa"
             placeholder="Nome da empresa"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -48,6 +49,7 @@ export default function Form({ data, onConfirm, onCancel }: IFormProps) {
         </FormGroup>
         <FormGroup>
           <Input
+            label="CNPJ"
             placeholder="CNPJ da Empresa"
             value={cnpj}
             onChange={(e) => setCNPJ(e.target.value)}
@@ -56,6 +58,7 @@ export default function Form({ data, onConfirm, onCancel }: IFormProps) {
       </Row>
       <FormGroup>
         <Input
+          label="Domínio"
           placeholder="Domínio da empresa"
           value={domain}
           onChange={(e) => setDomain(e.target.value)}

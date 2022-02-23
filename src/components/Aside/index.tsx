@@ -67,7 +67,7 @@ const Aside: React.FC = () => {
           Empresas
         </MenuItemLink>
 
-        <MenuItemLink href="/avaliacoes">
+        <MenuItemLink href="/assessment">
           <MdOutlineAssessment />
           Avaliações
         </MenuItemLink>

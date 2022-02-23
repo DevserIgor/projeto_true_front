@@ -1,8 +1,8 @@
-import React, { InputHTMLAttributes } from "react";
+import React, { TextareaHTMLAttributes } from "react";
 
 import { Container, InputContainer, Label } from "./styles";
 
-type IInputProps = InputHTMLAttributes<HTMLInputElement> & {
+type IInputProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   label?: string;
 };
 

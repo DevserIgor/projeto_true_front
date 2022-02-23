@@ -6,7 +6,7 @@ export const Container = styled.div`
   flex-direction: column;
 `;
 
-export const InputContainer = styled.input`
+export const InputContainer = styled.textarea`
   width: 100%;
   margin: 7px 0;
   padding: 10px;
