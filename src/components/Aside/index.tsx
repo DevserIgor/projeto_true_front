@@ -62,12 +62,12 @@ const Aside: React.FC = () => {
           Dashboard
         </MenuItemLink>
 
-        <MenuItemLink href="/list/empresas">
+        <MenuItemLink href="/store">
           <MdBusiness />
           Empresas
         </MenuItemLink>
 
-        <MenuItemLink href="/list/avaliacoes">
+        <MenuItemLink href="/avaliacoes">
           <MdOutlineAssessment />
           Avaliações
         </MenuItemLink>

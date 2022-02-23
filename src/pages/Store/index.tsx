@@ -49,7 +49,7 @@ interface IData {
   tagColor: string;
 }
 
-const List: React.FC<IRouteParams> = ({ match }) => {
+const Store: React.FC<IRouteParams> = ({ match }) => {
   const history = useHistory();
   const { setLoading } = useTheme();
 
@@ -93,7 +93,7 @@ const List: React.FC<IRouteParams> = ({ match }) => {
   return (
     <Container>
       <ContentHeader title={"Empresas"} lineColor={"#08f036"}>
-        <Button onClick={() => history.push("/list/create")}>Inserir</Button>
+        <Button onClick={() => history.push("/store/create")}>Inserir</Button>
       </ContentHeader>
       <Content>
         {data?.data.map((store, index) => {
@@ -105,7 +105,7 @@ const List: React.FC<IRouteParams> = ({ match }) => {
               domain={store.domain}
               active={store.active}
               onEdit={() => {
-                history.push(`/list/${store.id}`);
+                history.push(`/store/${store.id}`);
               }}
               onTrash={() => {
                 handleDelete(store.id, index);
@@ -123,4 +123,4 @@ const List: React.FC<IRouteParams> = ({ match }) => {
   );
 };
 
-export default List;
+export default Store;
