@@ -33,6 +33,7 @@ const Pagination: React.FC<IPaginationProps> = ({
       {[...Array(total).keys()].map((item, index) => {
         return (
           <PageItem
+            key={item}
             active={index + 1 === current}
             onClick={() => {
               if (onChangePage) onChangePage(index + 1);

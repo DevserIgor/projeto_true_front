@@ -1,16 +1,17 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import { getData, trash } from "services/StoreService";
 import ContentHeader from "components/ContentHeader";
 
 import { useHistory } from "react-router-dom";
-import { Container, Content, Filters } from "./styles";
+import { Container, Content } from "./styles";
 import BtnController from "components/BtnController";
 import CardListItem from "components/CardListItem";
 import Pagination from "components/Pagination";
 
 import Swal from "sweetalert2";
 import { useTheme } from "hooks/theme";
+import Button from "components/Button";
 
 type Store = {
   id: string;
@@ -54,10 +55,13 @@ const List: React.FC<IRouteParams> = ({ match }) => {
 
   const [page, setPage] = useState(1);
 
-  const { data, isFetching, isError, error, refetch } = useQuery<ResponseStore>(
+  const { data, isFetching, refetch } = useQuery<ResponseStore>(
     ["ListStores", page],
     async () => {
       return await getData(page);
+    },
+    {
+      refetchOnWindowFocus: false,
     }
   );
   useEffect(() => {
@@ -81,14 +85,6 @@ const List: React.FC<IRouteParams> = ({ match }) => {
       try {
         await trash(id);
         await refetch();
-        // await Swal.fire(
-        //   "Exclusão realizada!",
-        //   "Registro realizado com sucesso.",
-        //   "success"
-        // ).then((response) => {
-        //   refetch();
-        //   setLoading(false);
-        // });
       } catch (error) {}
       setLoading(false);
     }
@@ -97,12 +93,13 @@ const List: React.FC<IRouteParams> = ({ match }) => {
   return (
     <Container>
       <ContentHeader title={"Empresas"} lineColor={"#08f036"}>
-        <BtnController title="Filtrar" />
+        <Button onClick={() => history.push("/list/create")}>Inserir</Button>
       </ContentHeader>
       <Content>
         {data?.data.map((store, index) => {
           return (
             <CardListItem
+              key={store.id}
               cnpj={store.cnpj}
               name={store.name}
               domain={store.domain}

@@ -19,22 +19,22 @@ interface IData {
 }
 interface IFormData extends IData {}
 
-export default function Form(props: IFormProps) {
+export default function Form({ data, onConfirm, onCancel }: IFormProps) {
   const [name, setName] = useState<string>("");
   const [cnpj, setCNPJ] = useState<string>("");
   const [domain, setDomain] = useState<string>("");
   const [active, setActive] = useState<boolean>(false);
 
   useEffect(() => {
-    const data = props.data;
     setName(data?.name || "");
     setCNPJ(data?.cnpj || "");
     setDomain(data?.domain || "");
     setActive(data?.active || false);
-  }, [props]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   const handleConfirm = () => {
-    if (props.onConfirm) props.onConfirm({ name, cnpj, domain, active });
+    if (onConfirm) onConfirm({ name, cnpj, domain, active });
   };
   return (
     <Container>
@@ -75,7 +75,7 @@ export default function Form(props: IFormProps) {
         <ButtonItem>
           <Button
             onClick={() => {
-              if (props.onCancel) props.onCancel();
+              if (onCancel) onCancel();
             }}
             color="gray"
           >

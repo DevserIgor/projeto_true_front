@@ -1,10 +1,10 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import { getBydId, edit } from "services/StoreService";
 import Form from "../Form";
 import ContentHeader from "components/ContentHeader";
 
-import { Container, Content, Message } from "./styles";
+import { Container, Message } from "./styles";
 import { useTheme } from "hooks/theme";
 import { useHistory } from "react-router-dom";
 
@@ -38,24 +38,24 @@ const EditStore: React.FC<IRouteParams> = ({ match }) => {
   const [message, setMessage] = useState("");
   const { id } = match.params;
 
-  const { data, isFetching, isError, refetch } = useQuery<ResponseStore>(
+  const { data, isFetching } = useQuery<ResponseStore>(
     "FormStore",
     async () => {
       return await getBydId(id);
     },
     {
-      enabled: false,
+      enabled: true,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
-      refetchOnMount: false,
+      refetchOnMount: true,
       retryOnMount: false,
-      keepPreviousData: false,
+      // keepPreviousData: true,
     }
   );
-  useEffect(() => {
-    refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   refetch();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   useEffect(() => {
     setLoading(isFetching);
