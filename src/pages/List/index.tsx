@@ -1,258 +1,129 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { useQuery } from "react-query";
-import { uuid } from "uuidv4";
-import axios from "axios";
+import { getData, trash } from "services/StoreService";
+import ContentHeader from "components/ContentHeader";
 
-import ContentHeader from "../../components/ContentHeader";
-
-import gains from "../../repositories/gains";
-import expenses from "../../repositories/expenses";
-import formatCurrency from "../../utils/formatCurrency";
-import formatDate from "../../utils/formatDate";
-import listOfMonths from "../../utils/months";
-
+import { useHistory } from "react-router-dom";
 import { Container, Content, Filters } from "./styles";
-import BtnController from "../../components/BtnController";
-import CardListItem from "../../components/CardListItem";
+import BtnController from "components/BtnController";
+import CardListItem from "components/CardListItem";
+import Pagination from "components/Pagination";
+
+import Swal from "sweetalert2";
+import { useTheme } from "hooks/theme";
 
 type Store = {
-    id: string;
-    cnpj: string;
-    name: string;
-    domain: string;
-    active: boolean;
+  id: string;
+  cnpj: string;
+  name: string;
+  domain: string;
+  active: boolean;
 };
 
 type ResponseStore = {
-    from: number;
-    to: number;
-    per_page: number;
-    total: number;
-    current_page: number;
-    prev_page: number;
-    next_page: number;
-    last_page: number;
-    data: Store[];
+  from: number;
+  to: number;
+  per_page: number;
+  total: number;
+  current_page: number;
+  prev_page: number;
+  next_page: number;
+  last_page: number;
+  data: Store[];
 };
 interface IRouteParams {
-    match: {
-        params: {
-            type: string;
-        };
+  match: {
+    params: {
+      type: string;
     };
+  };
 }
 
 interface IData {
-    id: string;
-    description: string;
-    amountFormatted: string;
-    frequency: string;
-    dateFormatted: string;
-    tagColor: string;
+  id: string;
+  description: string;
+  amountFormatted: string;
+  frequency: string;
+  dateFormatted: string;
+  tagColor: string;
 }
 
 const List: React.FC<IRouteParams> = ({ match }) => {
-    const { data, isFetching } = useQuery<ResponseStore>(
-        "ListStores",
-        async () => {
-            const response = await axios.get(`http://localhost:3333/stores`);
-            // const response = await axios.get(`${process.env.URL_BASE_API}/stores`);
+  const history = useHistory();
+  const { setLoading } = useTheme();
 
-            return response.data;
-        }
-    );
-    
-    const [monthSelected, setMonthSelected] = useState<number>(
-        new Date().getMonth() + 1
-    );
-    const [yearSelected, setYearSelected] = useState<number>(
-        new Date().getFullYear()
-    );
-    const [frequencyFilterSelected, setFrequencyFilterSelected] = useState([
-        "recorrente",
-        "eventual",
-    ]);
+  const [page, setPage] = useState(1);
 
-    const movimentType = match.params.type;
+  const { data, isFetching, isError, error, refetch } = useQuery<ResponseStore>(
+    ["ListStores", page],
+    async () => {
+      return await getData(page);
+    }
+  );
+  useEffect(() => {
+    setLoading(isFetching);
+  }, [isFetching, setLoading]);
 
-    const pageData = useMemo(() => {
-        return movimentType === "empresas"
-            ? {
-                  title: "Empresas",
-                  lineColor: "#08f036",
-                  data: gains,
-              }
-            : {
-                  title: "Avaliações",
-                  lineColor: "#08f036",
-                  data: expenses,
-              };
-    }, [movimentType]);
+  const handleDelete = async (id: string, index: number) => {
+    const result = await Swal.fire({
+      title: "Tem certeza?",
+      text: "Tem certeza que deseja excluir este registro?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sim, excluir registro!",
+      cancelButtonText: "Não, cancelar!",
+    });
 
-    const years = useMemo(() => {
-        let uniqueYears: number[] = [];
+    if (result.isConfirmed) {
+      setLoading(true);
+      try {
+        await trash(id);
+        await refetch();
+        // await Swal.fire(
+        //   "Exclusão realizada!",
+        //   "Registro realizado com sucesso.",
+        //   "success"
+        // ).then((response) => {
+        //   refetch();
+        //   setLoading(false);
+        // });
+      } catch (error) {}
+      setLoading(false);
+    }
+  };
 
-        const { data } = pageData;
-
-        data.forEach((item) => {
-            const date = new Date(item.date);
-            const year = date.getFullYear();
-
-            if (!uniqueYears.includes(year)) {
-                uniqueYears.push(year);
-            }
-        });
-
-        return uniqueYears.map((year) => {
-            return {
-                value: year,
-                label: year,
-            };
-        });
-    }, [pageData]);
-
-    const months = useMemo(() => {
-        return listOfMonths.map((month, index) => {
-            return {
-                value: index + 1,
-                label: month,
-            };
-        });
-    }, []);
-
-    const handleFrequencyClick = (frequency: string) => {
-        const alreadySelected = frequencyFilterSelected.findIndex(
-            (item) => item === frequency
-        );
-
-        if (alreadySelected >= 0) {
-            const filtered = frequencyFilterSelected.filter(
-                (item) => item !== frequency
-            );
-            setFrequencyFilterSelected(filtered);
-        } else {
-            setFrequencyFilterSelected((prev) => [...prev, frequency]);
-        }
-    };
-
-    const handleMonthSelected = (month: string) => {
-        try {
-            const parseMonth = Number(month);
-            setMonthSelected(parseMonth);
-        } catch {
-            throw new Error("invalid month value. Is accept 0 - 24.");
-        }
-    };
-
-    const handleYearSelected = (year: string) => {
-        try {
-            const parseYear = Number(year);
-            setYearSelected(parseYear);
-        } catch {
-            throw new Error("invalid year value. Is accept integer numbers.");
-        }
-    };
-
-    useEffect(() => {
-        const { data } = pageData;
-
-        const filteredData = data.filter((item) => {
-            const date = new Date(item.date);
-            const month = date.getMonth() + 1;
-            const year = date.getFullYear();
-
-            return (
-                month === monthSelected &&
-                year === yearSelected &&
-                frequencyFilterSelected.includes(item.frequency)
-            );
-        });
-
-        const formattedData = filteredData.map((item) => {
-            return {
-                id: uuid(),
-                description: item.description,
-                amountFormatted: formatCurrency(Number(item.amount)),
-                frequency: item.frequency,
-                dateFormatted: formatDate(item.date),
-                tagColor:
-                    item.frequency === "recorrente" ? "#4E41F0" : "#E44C4E",
-            };
-        });
-
-        
-    }, [
-        pageData,
-        monthSelected,
-        yearSelected,
-        '',
-        frequencyFilterSelected,
-    ]);
-
-    return (
-        <Container>
-            <ContentHeader
-                title={pageData.title}
-                lineColor={pageData.lineColor}
-            >
-                {/* <SelectInput 
-                    options={months}
-                    onChange={(e) => handleMonthSelected(e.target.value)} 
-                    defaultValue={monthSelected}
-                />
-                <SelectInput 
-                    options={years} 
-                    onChange={(e) => handleYearSelected(e.target.value)} 
-                    defaultValue={yearSelected}
-                /> */}
-                <BtnController title="Filtrar" />
-            </ContentHeader>
-
-            {/* <Filters>
-                <button
-                    type="button"
-                    className={`
-                    tag-filter 
-                    tag-filter-recurrent
-                    ${
-                        frequencyFilterSelected.includes("recorrente") &&
-                        "tag-actived"
-                    }`}
-                    onClick={() => handleFrequencyClick("recorrente")}
-                >
-                    Recorrentes
-                </button>
-
-                <button
-                    type="button"
-                    className={`
-                    tag-filter 
-                    tag-filter-eventual
-                    ${
-                        frequencyFilterSelected.includes("eventual") &&
-                        "tag-actived"
-                    }`}
-                    onClick={() => handleFrequencyClick("eventual")}
-                >
-                    Eventuais
-                </button>
-            </Filters> */}
-
-            <Content>
-                {isFetching && <p>Carregando</p>}
-                {data?.data.map((store) => {
-                    return (
-                        <CardListItem
-                            cnpj={store.cnpj}
-                            name={store.name}
-                            domain={store.domain}
-                            active={store.active}
-                        />
-                    );
-                })}
-            </Content>
-        </Container>
-    );
+  return (
+    <Container>
+      <ContentHeader title={"Empresas"} lineColor={"#08f036"}>
+        <BtnController title="Filtrar" />
+      </ContentHeader>
+      <Content>
+        {data?.data.map((store, index) => {
+          return (
+            <CardListItem
+              cnpj={store.cnpj}
+              name={store.name}
+              domain={store.domain}
+              active={store.active}
+              onEdit={() => {
+                history.push(`/list/${store.id}`);
+              }}
+              onTrash={() => {
+                handleDelete(store.id, index);
+              }}
+            />
+          );
+        })}
+      </Content>
+      <Pagination
+        total={data?.last_page || 0}
+        current={page}
+        onChangePage={(page: number) => setPage(page)}
+      />
+    </Container>
+  );
 };
 
 export default List;

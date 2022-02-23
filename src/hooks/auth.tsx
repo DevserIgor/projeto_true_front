@@ -44,21 +44,23 @@ const initialUser: User = {
   avatar_url: "",
 };
 
-const STORAGE_KEY = "@TRUE_ECCOMERCE";
+const STORAGE_KEY = "@TRUE_COMMERCE";
 const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 const AuthProvider: React.FC = ({ children }) => {
   const [message, setMessage] = useState<string>("");
+
   const [logged, setLogged] = useState<boolean>(() => {
     const isLoggedString = localStorage.getItem(`${STORAGE_KEY}:logged`);
     const isLogged = JSON.parse(isLoggedString || "false");
-
     return !!isLogged;
   });
+
   const [token, setToken] = useState<string>(() => {
     const token = localStorage.getItem(`${STORAGE_KEY}:token`);
     return token || "";
   });
+
   const [user, setUser] = useState<User>(() => {
     const userString = localStorage.getItem(`${STORAGE_KEY}:user`);
     return userString ? JSON.parse(userString || "") : initialUser;
