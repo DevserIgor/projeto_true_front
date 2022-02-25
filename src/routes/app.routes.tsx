@@ -12,6 +12,7 @@ import CreateAssessment from "pages/Assessment/CreateAssessment";
 import User from "pages/User";
 import EditUser from "pages/User/EditUser";
 import CreateUser from "pages/User/CreateUser";
+import UserProfile from "pages/UserProfile";
 
 const AppRoutes: React.FC = () => (
   <Layout>
@@ -26,6 +27,7 @@ const AppRoutes: React.FC = () => (
       <Route path="/user" exact component={User} />
       <Route path="/user/create" exact component={CreateUser} />
       <Route path="/user/:id" exact component={EditUser} />
+      <Route path="/profile" exact component={UserProfile} />
     </Switch>
   </Layout>
 );

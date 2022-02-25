@@ -8,6 +8,8 @@ import {
   MdClose,
   MdMenu,
   MdBusiness,
+  MdOutlineSupervisorAccount,
+  MdPerson,
 } from "react-icons/md";
 
 import logoImg from "../../assets/logo.svg";
@@ -57,6 +59,10 @@ const Aside: React.FC = () => {
       </Header>
 
       <MenuContainer>
+        <MenuItemLink href="/profile">
+          <MdPerson />
+          Meu Perfil
+        </MenuItemLink>
         <MenuItemLink href="/">
           <MdDashboard />
           Dashboard
@@ -72,7 +78,7 @@ const Aside: React.FC = () => {
           Avaliações
         </MenuItemLink>
         <MenuItemLink href="/user">
-          <MdOutlineAssessment />
+          <MdOutlineSupervisorAccount />
           Usuários
         </MenuItemLink>
 
