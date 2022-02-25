@@ -1,6 +1,5 @@
 import Button from "components/Button";
 import Input from "components/Input";
-import ReactStars from "react-stars";
 import React, { useEffect, useState } from "react";
 import { Container, Row, FormGroup, ButtonGroup, ButtonItem } from "./styles";
 import { useTheme } from "styled-components";

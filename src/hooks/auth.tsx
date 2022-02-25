@@ -9,6 +9,7 @@ import {
 } from "date-fns";
 import jwtDecode from "jwt-decode";
 import api from "../services/api";
+import { useTheme } from "./theme";
 
 interface IAuthContext {
   logged: boolean;
@@ -49,6 +50,7 @@ const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 const AuthProvider: React.FC = ({ children }) => {
   const [message, setMessage] = useState<string>("");
+  const { setLoading } = useTheme();
 
   const [logged, setLogged] = useState<boolean>(() => {
     const isLoggedString = localStorage.getItem(`${STORAGE_KEY}:logged`);
@@ -96,6 +98,7 @@ const AuthProvider: React.FC = ({ children }) => {
   };
 
   const signIn = async (email: string, password: string) => {
+    setLoading(true);
     try {
       setMessage("");
       const result = await login(email, password);
@@ -107,6 +110,7 @@ const AuthProvider: React.FC = ({ children }) => {
       setMessage("Email e/ou senha inválidos");
       signOut();
     }
+    setLoading(false);
   };
 
   const signOut = () => {

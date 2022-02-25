@@ -9,6 +9,9 @@ import CreateStore from "pages/Store/CreateStore";
 import Assessment from "pages/Assessment";
 import EditAssessment from "pages/Assessment/EditAssessment";
 import CreateAssessment from "pages/Assessment/CreateAssessment";
+import User from "pages/User";
+import EditUser from "pages/User/EditUser";
+import CreateUser from "pages/User/CreateUser";
 
 const AppRoutes: React.FC = () => (
   <Layout>
@@ -20,6 +23,9 @@ const AppRoutes: React.FC = () => (
       <Route path="/assessment" exact component={Assessment} />
       <Route path="/assessment/create" exact component={CreateAssessment} />
       <Route path="/assessment/:id" exact component={EditAssessment} />
+      <Route path="/user" exact component={User} />
+      <Route path="/user/create" exact component={CreateUser} />
+      <Route path="/user/:id" exact component={EditUser} />
     </Switch>
   </Layout>
 );

@@ -71,6 +71,10 @@ const Aside: React.FC = () => {
           <MdOutlineAssessment />
           Avaliações
         </MenuItemLink>
+        <MenuItemLink href="/user">
+          <MdOutlineAssessment />
+          Usuários
+        </MenuItemLink>
 
         <MenuItemButton onClick={signOut}>
           <MdExitToApp />
