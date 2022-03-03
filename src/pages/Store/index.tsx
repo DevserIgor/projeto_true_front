@@ -4,14 +4,22 @@ import { getData, trash } from "services/StoreService";
 import ContentHeader from "components/ContentHeader";
 
 import { useHistory } from "react-router-dom";
-import { Container, Content } from "./styles";
-import BtnController from "components/BtnController";
+import {
+  Container,
+  Content,
+  FormGroup,
+  ContainerInputWithMarginRight,
+  ContainerInputWithHorizontalMargin,
+  ContainerInputWithMarginLeft,
+} from "./styles";
 import CardListItem from "components/CardListItem";
 import Pagination from "components/Pagination";
 
 import Swal from "sweetalert2";
 import { useTheme } from "hooks/theme";
 import Button from "components/Button";
+import Input from "components/Input";
+import Toggle from "components/Toggle";
 
 type Store = {
   id: string;
@@ -54,11 +62,15 @@ const Store: React.FC<IRouteParams> = ({ match }) => {
   const { setLoading } = useTheme();
 
   const [page, setPage] = useState(1);
+  const [name, setName] = useState("");
+  const [cnpj, setCNPJ] = useState("");
+  const [domain, setDomain] = useState("");
+  const [active, setActive] = useState(true);
 
   const { data, isFetching, refetch } = useQuery<ResponseStore>(
-    ["ListStores", page],
+    ["ListStores", page, name, cnpj, domain, active],
     async () => {
-      return await getData(page);
+      return await getData(page, { name, cnpj, domain, active });
     },
     {
       refetchOnWindowFocus: false,
@@ -96,6 +108,39 @@ const Store: React.FC<IRouteParams> = ({ match }) => {
         <Button onClick={() => history.push("/store/create")}>Inserir</Button>
       </ContentHeader>
       <Content>
+        <FormGroup>
+          <ContainerInputWithMarginRight>
+            <Input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Pesquisar por nome..."
+            />
+          </ContainerInputWithMarginRight>
+          <ContainerInputWithHorizontalMargin>
+            <Input
+              value={cnpj}
+              onChange={(e) => setCNPJ(e.target.value)}
+              placeholder="Pesquisar por CNPJ..."
+            />
+          </ContainerInputWithHorizontalMargin>
+          <ContainerInputWithHorizontalMargin>
+            <Input
+              value={domain}
+              onChange={(e) => setDomain(e.target.value)}
+              placeholder="Pesquisar por domínio..."
+            />
+          </ContainerInputWithHorizontalMargin>
+          <ContainerInputWithMarginLeft>
+            <Toggle
+              checked={active}
+              labelLeft={"Inativo"}
+              labelRight={"Ativo"}
+              onChange={(checked) => {
+                setActive(!!checked);
+              }}
+            />
+          </ContainerInputWithMarginLeft>
+        </FormGroup>
         {data?.data.map((store, index) => {
           return (
             <CardListItem
