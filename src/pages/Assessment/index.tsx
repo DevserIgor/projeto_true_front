@@ -4,13 +4,22 @@ import { getData, trash } from "services/AssessmentService";
 import ContentHeader from "components/ContentHeader";
 
 import { useHistory } from "react-router-dom";
-import { Container, Content } from "./styles";
+import {
+  Container,
+  ContainerInputWithHorizontalMargin,
+  ContainerInputWithMarginLeft,
+  ContainerInputWithMarginRight,
+  Content,
+  FormGroup,
+} from "./styles";
 import AssessmentListItem from "./AssessmentListItem";
 import Pagination from "components/Pagination";
 
 import Swal from "sweetalert2";
 import { useTheme } from "hooks/theme";
 import Button from "components/Button";
+import Input from "components/Input";
+import moment from "moment";
 
 type Assessment = {
   id: string;
@@ -45,10 +54,20 @@ const Assessment: React.FC<IRouteParams> = ({ match }) => {
 
   const [page, setPage] = useState(1);
 
+  const [stars, setStars] = useState<number | undefined>();
+  const [avaliador, setAvaliador] = useState("");
+  const [from, setFrom] = useState<Date | undefined>();
+  const [to, setTo] = useState<Date | undefined>();
+
   const { data, isFetching, refetch } = useQuery<ResponseAssessment>(
-    ["ListAssessment", page],
+    ["ListAssessment", page, avaliador, from, to, stars],
     async () => {
-      return await getData(page);
+      return await getData(page, {
+        name: avaliador,
+        dateStart: from && moment(from).format("yyyy-MM-DD"),
+        dateEnd: to && moment(to).format("yyyy-MM-DD"),
+        stars: stars && stars > 0 ? stars : undefined,
+      });
     },
     {
       refetchOnWindowFocus: false,
@@ -57,6 +76,17 @@ const Assessment: React.FC<IRouteParams> = ({ match }) => {
   useEffect(() => {
     setLoading(isFetching);
   }, [isFetching, setLoading]);
+
+  const handleStars = (param: string) => {
+    const value = Number(param || "0");
+    if (!value || value <= 0) {
+      setStars(undefined);
+    }
+
+    if (value <= 5) {
+      setStars(value);
+    }
+  };
 
   const handleDelete = async (id: string, index: number) => {
     const result = await Swal.fire({
@@ -88,6 +118,45 @@ const Assessment: React.FC<IRouteParams> = ({ match }) => {
         </Button>
       </ContentHeader>
       <Content>
+        <FormGroup>
+          <ContainerInputWithMarginRight>
+            <Input
+              label="Avaliador"
+              value={avaliador}
+              onChange={(e) => setAvaliador(e.target.value)}
+              placeholder="Pesquisar por avaliador..."
+            />
+          </ContainerInputWithMarginRight>
+          <ContainerInputWithHorizontalMargin>
+            <Input
+              label="Nota"
+              value={stars}
+              type="number"
+              onChange={(e) => handleStars(e.target.value)}
+              placeholder="Pesquisar por nota..."
+            />
+          </ContainerInputWithHorizontalMargin>
+          <ContainerInputWithHorizontalMargin>
+            <Input
+              style={{ padding: "8px" }}
+              label="De"
+              value={from ? moment(from).format("yyyy-MM-DD") : ""}
+              type="date"
+              onChange={(e) => setFrom(moment(e.target.value).toDate())}
+              placeholder="Pesquisar por domínio..."
+            />
+          </ContainerInputWithHorizontalMargin>
+          <ContainerInputWithMarginLeft>
+            <Input
+              style={{ padding: "8px" }}
+              label="Até"
+              value={to ? moment(to).format("yyyy-MM-DD") : ""}
+              type="date"
+              onChange={(e) => setTo(moment(e.target.value).toDate())}
+              placeholder="Pesquisar por domínio..."
+            />
+          </ContainerInputWithMarginLeft>
+        </FormGroup>
         {data?.data.map((assessment, index) => {
           return (
             <AssessmentListItem

@@ -8,9 +8,19 @@ export interface AssessmentDTO {
   date: Date;
 }
 
-export const getData = async (page = 1) => {
+interface Filters {
+  name?: string;
+  stars?: number;
+  message?: string;
+  dateStart?: string;
+  dateEnd?: string;
+}
+
+export const getData = async (page = 1, params: Filters) => {
   try {
-    const response = await api.get(`/assessments?page=${page}`);
+    const response = await api.get(`/assessments`, {
+      params: { ...params, page },
+    });
     return response.data;
   } catch (error) {
     if (error.response) {

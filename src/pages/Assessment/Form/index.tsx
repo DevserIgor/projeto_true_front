@@ -53,6 +53,7 @@ export default function Form({ data, onConfirm, onCancel }: IFormProps) {
             onChange={(e) => setName(e.target.value)}
           />
         </FormGroup>
+
         <FormGroup>
           <Input
             label="Data"
@@ -71,19 +72,6 @@ export default function Form({ data, onConfirm, onCancel }: IFormProps) {
             onChange={(e) => setDate(new Date(e.target.value))}
           />
         </FormGroup>
-        <FormGroup>
-          <Rating
-            leftLabel="Muito Ruim"
-            rightLabel="Muito Bom"
-            half={false}
-            count={5}
-            value={stars}
-            onChange={setStars}
-            size={25}
-            color2={theme.colors.green}
-            color1={theme.colors.gray}
-          />
-        </FormGroup>
       </Row>
       <FormGroup>
         <InputTextArea
@@ -93,7 +81,19 @@ export default function Form({ data, onConfirm, onCancel }: IFormProps) {
           onChange={(e) => setMessage(e.target.value)}
         />
       </FormGroup>
-
+      <FormGroup>
+        <Rating
+          leftLabel="Muito Ruim"
+          rightLabel="Muito Bom"
+          half={false}
+          count={5}
+          value={stars}
+          onChange={setStars}
+          size={25}
+          color2={theme.colors.green}
+          color1={theme.colors.gray}
+        />
+      </FormGroup>
       <ButtonGroup>
         <ButtonItem>
           <Button
