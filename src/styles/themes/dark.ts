@@ -18,6 +18,6 @@ export default {
     warning: "#E44C4E",
 
     pagination: "#08f036",
-    
+    lineColor: "#757575",
   },
 };

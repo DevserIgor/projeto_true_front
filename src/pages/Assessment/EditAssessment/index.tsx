@@ -8,8 +8,6 @@ import { Container, Message } from "./styles";
 import { useTheme } from "hooks/theme";
 import { useHistory } from "react-router-dom";
 
-
-
 type ResponseAssessment = {
   id?: string;
   name: string;

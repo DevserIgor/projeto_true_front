@@ -16,5 +16,6 @@ export const InputContainer = styled.input`
 
 export const Label = styled.label`
   margin: 0px 10px;
-  color: ${(props) => props.theme.colors.pagination};
+  color: ${(props) =>
+    props.color ? props.color : props.theme.colors.pagination};
 `;

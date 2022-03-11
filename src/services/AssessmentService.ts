@@ -32,6 +32,22 @@ export const getData = async (page = 1, params: Filters) => {
     }
   }
 };
+export const getDataRandom = async (page = 1, productId: number) => {
+  try {
+    const response = await api.get(`/assessments/list-random`, {
+      params: { productId },
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw error.response.data;
+    } else if (error.data) {
+      throw error.data;
+    } else {
+      throw [{ message: `Ocorreu um erro: ${error}` }];
+    }
+  }
+};
 export const getBydId = async (id: string) => {
   try {
     const response = await api.get(`/assessments/${id}`);

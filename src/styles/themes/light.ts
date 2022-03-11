@@ -17,5 +17,7 @@ export default {
     info: "#3B5998",
     warning: "#FF6961",
     pagination: "#1f1f1f",
+
+    lineColor: "#757575",
   },
 };

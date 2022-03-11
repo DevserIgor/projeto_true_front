@@ -19,13 +19,19 @@ interface ReactStarsProps {
 interface RatingProps extends ReactStarsProps {
   leftLabel?: string;
   rightLabel?: string;
+  labelColor?: string;
 }
 
-const Rating: React.FC<RatingProps> = ({ leftLabel, rightLabel, ...rest }) => (
+const Rating: React.FC<RatingProps> = ({
+  leftLabel,
+  rightLabel,
+  labelColor,
+  ...rest
+}) => (
   <Container>
-    <Label>{leftLabel}</Label>
+    <Label color={labelColor}>{leftLabel}</Label>
     <ReactStars {...rest} />
-    <Label>{rightLabel}</Label>
+    <Label color={labelColor}>{rightLabel}</Label>
   </Container>
 );
 

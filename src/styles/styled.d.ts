@@ -21,6 +21,7 @@ declare module "styled-components" {
       warning: string;
 
       pagination: string;
+      lineColor: string;
     };
   }
 }
