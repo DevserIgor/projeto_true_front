@@ -1,5 +1,6 @@
 import Rating from "components/Rating";
 import React, { useState } from "react";
+import { BallTriangle } from "react-loader-spinner";
 
 import {
   Container,
@@ -20,9 +21,10 @@ interface IData {
 }
 
 interface IFormProps {
+  isLoading: boolean;
   onConfirm(data: IData): any;
 }
-const AssessmentForm: React.FC<IFormProps> = ({ onConfirm }) => {
+const AssessmentForm: React.FC<IFormProps> = ({ isLoading, onConfirm }) => {
   const [name, setName] = useState("");
   const [stars, setStars] = useState(0);
   const [message, setMessage] = useState("");
@@ -78,7 +80,10 @@ const AssessmentForm: React.FC<IFormProps> = ({ onConfirm }) => {
         </FormGroup>
       </Row>
       <ButtonContainer>
-        <ButtonConfirm onClick={handleConfirm}>Enviar Avaliação</ButtonConfirm>
+        <ButtonConfirm onClick={handleConfirm} disabled={isLoading}>
+          Enviar Avaliação{"   "}
+          {isLoading && <BallTriangle color="#ffffff" height={20} width={20} />}
+        </ButtonConfirm>
       </ButtonContainer>
     </Container>
   );

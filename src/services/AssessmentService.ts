@@ -6,6 +6,8 @@ export interface AssessmentDTO {
   stars: number;
   message: string;
   date: Date;
+  product_id?: number | null;
+  approved?: boolean | null;
 }
 
 interface Filters {
@@ -34,7 +36,7 @@ export const getData = async (page = 1, params: Filters) => {
 };
 export const getDataRandom = async (page = 1, productId: number) => {
   try {
-    const response = await api.get(`/assessments/list-random`, {
+    const response = await api.get(`/assessmentsRandom`, {
       params: { productId },
     });
     return response.data;
@@ -68,6 +70,20 @@ export const getBydId = async (id: string) => {
 export const create = async (data: AssessmentDTO) => {
   try {
     const response = await api.post("/assessments", data);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw error.response.data;
+    } else if (error.data) {
+      throw error.data;
+    } else {
+      throw [{ message: `Ocorreu um erro: ${error}` }];
+    }
+  }
+};
+export const createRandom = async (data: AssessmentDTO) => {
+  try {
+    const response = await api.post("/assessmentsRandom", data);
     return response.data;
   } catch (error) {
     if (error.response) {

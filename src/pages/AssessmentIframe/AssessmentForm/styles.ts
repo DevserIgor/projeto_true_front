@@ -47,6 +47,8 @@ export const ButtonContainer = styled.div`
   justify-content: flex-end;
 `;
 export const ButtonConfirm = styled.button`
+  display: flex;
+  align-items: center;
   align-self: flex-end;
   padding: 15px 25px;
   border-radius: 5px;
