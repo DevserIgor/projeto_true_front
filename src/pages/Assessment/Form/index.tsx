@@ -6,6 +6,7 @@ import { useTheme } from "styled-components";
 import InputTextArea from "components/InputTextArea";
 import Rating from "components/Rating";
 import moment from "moment";
+import Toggle from "components/Toggle";
 
 interface IFormProps {
   data?: IFormData;
@@ -19,6 +20,7 @@ interface IData {
   message: string;
   date: Date;
   stars: number;
+  approved: boolean;
 }
 interface IFormData extends IData {}
 
@@ -29,18 +31,19 @@ export default function Form({ data, onConfirm, onCancel }: IFormProps) {
   const [message, setMessage] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
   const [stars, setStars] = useState<number>(0);
+  const [approved, setApproved] = useState<boolean>(false);
 
   useEffect(() => {
     setName(data?.name || "");
     setMessage(data?.message || "");
     setDate(data?.date || new Date());
     setStars(data?.stars || 0);
+    setApproved(!!data?.approved);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const handleConfirm = () => {
-    console.log({ name, message, date, stars });
-    if (onConfirm) onConfirm({ name, message, date, stars });
+    if (onConfirm) onConfirm({ name, message, date, stars, approved });
   };
   return (
     <Container>
@@ -92,6 +95,16 @@ export default function Form({ data, onConfirm, onCancel }: IFormProps) {
           size={25}
           color2={theme.colors.green}
           color1={theme.colors.gray}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Toggle
+          checked={approved}
+          labelLeft={"Reprovado"}
+          labelRight={"Aprovado"}
+          onChange={(checked) => {
+            setApproved(!!checked);
+          }}
         />
       </FormGroup>
       <ButtonGroup>

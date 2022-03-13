@@ -27,6 +27,7 @@ type Assessment = {
   stars: number;
   message: string;
   date: string;
+  approved: boolean;
 };
 
 type ResponseAssessment = {
@@ -165,6 +166,7 @@ const Assessment: React.FC<IRouteParams> = ({ match }) => {
               message={assessment.message}
               date={new Date(assessment.date)}
               stars={assessment.stars}
+              approved={assessment.approved}
               onEdit={() => {
                 history.push(`/assessment/${assessment.id}`);
               }}

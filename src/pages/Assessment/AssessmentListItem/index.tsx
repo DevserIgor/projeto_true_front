@@ -9,6 +9,7 @@ interface IAssessmentListItemProps {
   message: string;
   stars: number;
   date: Date;
+  approved: boolean;
   onEdit: Function;
   onTrash: Function;
 }
@@ -18,6 +19,7 @@ const AssessmentListItem: React.FC<IAssessmentListItemProps> = ({
   message,
   stars,
   date,
+  approved,
   onEdit,
   onTrash,
 }) => {

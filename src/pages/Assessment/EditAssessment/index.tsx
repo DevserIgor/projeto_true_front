@@ -14,6 +14,8 @@ type ResponseAssessment = {
   message: string;
   date: Date;
   stars: number;
+  approved: boolean;
+  product_id: number | null;
 };
 
 interface IRouteParams {
