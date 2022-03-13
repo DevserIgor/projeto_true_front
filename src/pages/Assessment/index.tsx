@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "react-query";
-import { getData, trash } from "services/AssessmentService";
+import { approveAssessment, getData, trash } from "services/AssessmentService";
 import ContentHeader from "components/ContentHeader";
 
 import { useHistory } from "react-router-dom";
@@ -20,6 +20,7 @@ import { useTheme } from "hooks/theme";
 import Button from "components/Button";
 import Input from "components/Input";
 import moment from "moment";
+import Select from "components/Select";
 
 type Assessment = {
   id: string;
@@ -59,15 +60,20 @@ const Assessment: React.FC<IRouteParams> = ({ match }) => {
   const [avaliador, setAvaliador] = useState("");
   const [from, setFrom] = useState<Date | undefined>();
   const [to, setTo] = useState<Date | undefined>();
+  const [status, setStatus] = useState<number>(0);
 
   const { data, isFetching, refetch } = useQuery<ResponseAssessment>(
-    ["ListAssessment", page, avaliador, from, to, stars],
+    ["ListAssessment", page, avaliador, from, to, stars, status],
     async () => {
+      let approved = undefined;
+      if (status === 1) approved = false;
+      if (status === 2) approved = true;
       return await getData(page, {
         name: avaliador,
         dateStart: from && moment(from).format("yyyy-MM-DD"),
         dateEnd: to && moment(to).format("yyyy-MM-DD"),
         stars: stars && stars > 0 ? stars : undefined,
+        approved,
       });
     },
     {
@@ -110,6 +116,27 @@ const Assessment: React.FC<IRouteParams> = ({ match }) => {
       setLoading(false);
     }
   };
+  const handleCheck = async (id: string, index: number) => {
+    const result = await Swal.fire({
+      title: "Confirmar",
+      text: "Confirmar aprovação da avaliação?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sim, confirmar!",
+      cancelButtonText: "Não, cancelar!",
+    });
+
+    if (result.isConfirmed) {
+      setLoading(true);
+      try {
+        await approveAssessment(id, true);
+        await refetch();
+      } catch (error) {}
+      setLoading(false);
+    }
+  };
 
   return (
     <Container>
@@ -144,7 +171,6 @@ const Assessment: React.FC<IRouteParams> = ({ match }) => {
               value={from ? moment(from).format("yyyy-MM-DD") : ""}
               type="date"
               onChange={(e) => setFrom(moment(e.target.value).toDate())}
-              placeholder="Pesquisar por domínio..."
             />
           </ContainerInputWithHorizontalMargin>
           <ContainerInputWithMarginLeft>
@@ -154,7 +180,22 @@ const Assessment: React.FC<IRouteParams> = ({ match }) => {
               value={to ? moment(to).format("yyyy-MM-DD") : ""}
               type="date"
               onChange={(e) => setTo(moment(e.target.value).toDate())}
-              placeholder="Pesquisar por domínio..."
+            />
+          </ContainerInputWithMarginLeft>
+          <ContainerInputWithMarginLeft>
+            <Select
+              style={{ padding: "8px" }}
+              label="Status"
+              value={status}
+              // onChange={(e) => console.log(e)}
+              onChange={(e) => {
+                setStatus(parseInt(e.target.value));
+              }}
+              data={[
+                { description: "Todos", value: 0 },
+                { description: "Pendentes de Aprovação", value: 1 },
+                { description: "Aprovados", value: 2 },
+              ]}
             />
           </ContainerInputWithMarginLeft>
         </FormGroup>
@@ -172,6 +213,9 @@ const Assessment: React.FC<IRouteParams> = ({ match }) => {
               }}
               onTrash={() => {
                 handleDelete(assessment.id, index);
+              }}
+              onCheck={() => {
+                handleCheck(assessment.id, index);
               }}
             />
           );

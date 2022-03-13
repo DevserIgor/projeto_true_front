@@ -1,6 +1,6 @@
 import React from "react";
 import ReactStars from "react-stars";
-import { FiEdit2, FiTrash2 } from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiCheck } from "react-icons/fi";
 import { CnpjName, Container, ButtonContainer, ButtonItem } from "./styles";
 import moment from "moment";
 import { useTheme } from "styled-components";
@@ -12,6 +12,7 @@ interface IAssessmentListItemProps {
   approved: boolean;
   onEdit: Function;
   onTrash: Function;
+  onCheck?: Function;
 }
 
 const AssessmentListItem: React.FC<IAssessmentListItemProps> = ({
@@ -22,6 +23,7 @@ const AssessmentListItem: React.FC<IAssessmentListItemProps> = ({
   approved,
   onEdit,
   onTrash,
+  onCheck,
 }) => {
   const theme = useTheme();
 
@@ -45,6 +47,15 @@ const AssessmentListItem: React.FC<IAssessmentListItemProps> = ({
         </small>
       </div>
       <ButtonContainer>
+        {!approved && (
+          <ButtonItem
+            onClick={() => {
+              if (onCheck) onCheck();
+            }}
+          >
+            <FiCheck size={20} />
+          </ButtonItem>
+        )}
         <ButtonItem
           onClick={() => {
             if (onEdit) onEdit();

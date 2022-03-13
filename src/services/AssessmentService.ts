@@ -16,6 +16,7 @@ interface Filters {
   message?: string;
   dateStart?: string;
   dateEnd?: string;
+  approved?: boolean;
 }
 
 export const getData = async (page = 1, params: Filters) => {
@@ -98,6 +99,20 @@ export const createRandom = async (data: AssessmentDTO) => {
 export const edit = async (id: string, data: AssessmentDTO) => {
   try {
     const response = await api.put(`/assessments/${id}`, data);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw error.response.data;
+    } else if (error.data) {
+      throw error.data;
+    } else {
+      throw { message: `Ocorreu um erro: ${error}` };
+    }
+  }
+};
+export const approveAssessment = async (id: string, approved: boolean) => {
+  try {
+    const response = await api.put(`/assessmentsApproval/${id}`, { approved });
     return response.data;
   } catch (error) {
     if (error.response) {
