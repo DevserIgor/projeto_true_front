@@ -76,7 +76,7 @@ const AssessmentIframe: React.FC<IRouteParams> = ({ match }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { data, isFetching, refetch } = useQuery<Assessment[]>(
-    ["ListAssessmentRandom", productId],
+    ["ListAssessmentRandom", productId, page],
     async () => {
       return await getDataRandom(1, productId);
     },
@@ -142,7 +142,6 @@ const AssessmentIframe: React.FC<IRouteParams> = ({ match }) => {
             current={page}
             onChangePage={(page: number) => {
               setPage(page);
-              refetch();
             }}
           />
         </ContentPagination>
