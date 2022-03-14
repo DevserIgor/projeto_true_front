@@ -222,6 +222,7 @@ const Assessment: React.FC<IRouteParams> = ({ match }) => {
         })}
       </Content>
       <Pagination
+        
         total={data?.last_page || 0}
         current={page}
         onChangePage={(page: number) => setPage(page)}

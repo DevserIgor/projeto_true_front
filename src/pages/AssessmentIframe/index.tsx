@@ -57,23 +57,25 @@ const initialTotalRating: ITotalRating = {
 
 const AssessmentIframe: React.FC<IRouteParams> = ({ match }) => {
   const STORAGE_KEY = "@TRUE_COMMERCE_AVALIACOES";
-  const { productId, page } = match.params;
+  const { productId } = match.params;
 
   const [totalRating, setTotalRating] = useState<ITotalRating>(() => {
     const totalRatingString = localStorage.getItem(
       `${STORAGE_KEY}:dateRating_${productId}`
     );
-    return  totalRatingString ? JSON.parse(totalRatingString || "") : initialTotalRating;
+    return totalRatingString
+      ? JSON.parse(totalRatingString || "")
+      : initialTotalRating;
   });
-  
+
   const [average, setAverage] = useState(getRandomStarts());
   const [amount, setAmount] = useState(totalRating.total);
-  const [pageNumber, setPage] = useState(page);
+  const [page, setPage] = useState(1);
 
   const [formOpened, setFormOpened] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { data, isFetching } = useQuery<Assessment[]>(
+  const { data, isFetching, refetch } = useQuery<Assessment[]>(
     ["ListAssessmentRandom", productId],
     async () => {
       return await getDataRandom(1, productId);
@@ -100,24 +102,11 @@ const AssessmentIframe: React.FC<IRouteParams> = ({ match }) => {
 
     setFormOpened(false);
 
-    
-    
     // setTotalRating({
     //   total: 1,
     //   date: moment(new Date()),
     // });
   };
-  
-  // let dateNow = moment("2022-03-16T10:10:04.222Z");
-  // let dateRating = moment(totalRating.date);
-  // let duration = dateNow.diff(dateRating, "days");
-  // if (duration >=1) {
-  //   setTotalRating({
-  //     total: totalRating.total + 5,
-  //     date: moment(new Date()).toDate(),
-  //   });
-  // }
-  
 
   useEffect(() => {
     localStorage.setItem(
@@ -125,7 +114,7 @@ const AssessmentIframe: React.FC<IRouteParams> = ({ match }) => {
       JSON.stringify(totalRating)
     );
   }, [productId, totalRating]);
-  
+
   return (
     <>
       <Container>
@@ -147,10 +136,14 @@ const AssessmentIframe: React.FC<IRouteParams> = ({ match }) => {
           data?.map((item: Assessment) => <AssessmentItem {...item} />)
         )}
         <ContentPagination>
-          <Pagination 
-            total={10 || 0}
+          <Pagination
+            // showPageNumbers={false}
+            total={Math.round(totalRating.total / 15) || 0}
             current={page}
-            onChangePage={(page: number) => setPage(page)}
+            onChangePage={(page: number) => {
+              setPage(page);
+              refetch();
+            }}
           />
         </ContentPagination>
       </Container>
