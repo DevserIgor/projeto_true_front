@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 import Layout from "components/Layout";
 import Dashboard from "pages/Dashboard";
@@ -16,7 +16,7 @@ import UserProfile from "pages/UserProfile";
 
 const AppRoutes: React.FC = () => (
   <Layout>
-    <Switch>
+    <>
       <Route path="/" exact component={Dashboard} />
       <Route path="/store" exact component={Store} />
       <Route path="/store/create" exact component={CreateStore} />
@@ -28,7 +28,7 @@ const AppRoutes: React.FC = () => (
       <Route path="/user/create" exact component={CreateUser} />
       <Route path="/user/:id" exact component={EditUser} />
       <Route path="/profile" exact component={UserProfile} />
-    </Switch>
+    </>
   </Layout>
 );
 
