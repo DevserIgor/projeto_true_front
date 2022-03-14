@@ -3,11 +3,10 @@ import styled from "styled-components";
 export const Container = styled.div`
   display: flex;
   flex: 1;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
 `;
 
-export const InputContainer = styled.input`
+export const InputContainer = styled.select`
   width: 100%;
   margin: 7px 0;
   padding: 10px;
@@ -15,7 +14,5 @@ export const InputContainer = styled.input`
 `;
 
 export const Label = styled.label`
-  margin: 0px 10px;
-  color: ${(props) =>
-    props.color ? props.color : props.theme.colors.pagination};
+  color: ${(props) => props.theme.colors.pagination};
 `;

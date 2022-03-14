@@ -29,6 +29,7 @@ interface ITheme {
     info: string;
     warning: string;
     pagination: string;
+    lineColor: string;
   };
 }
 

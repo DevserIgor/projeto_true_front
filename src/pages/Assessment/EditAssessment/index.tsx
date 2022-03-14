@@ -8,14 +8,14 @@ import { Container, Message } from "./styles";
 import { useTheme } from "hooks/theme";
 import { useHistory } from "react-router-dom";
 
-
-
 type ResponseAssessment = {
   id?: string;
   name: string;
   message: string;
   date: Date;
   stars: number;
+  approved: boolean;
+  product_id: number | null;
 };
 
 interface IRouteParams {

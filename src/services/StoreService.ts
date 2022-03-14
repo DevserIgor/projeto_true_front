@@ -7,9 +7,20 @@ export interface StoreDTO {
   active?: boolean;
 }
 
-export const getData = async (page = 1) => {
+interface Filters {
+  cnpj?: string;
+  name?: string;
+  domain?: string;
+  active?: boolean;
+}
+export const getData = async (page = 1, params: Filters) => {
   try {
-    const response = await api.get(`/stores?page=${page}`);
+    console.log(
+      { params },
+      api.get(`/stores`, { params: { ...params, page } })
+    );
+    const response = await api.get(`/stores`, { params: { ...params, page } });
+
     return response.data;
   } catch (error) {
     if (error.response) {
