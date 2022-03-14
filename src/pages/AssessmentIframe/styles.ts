@@ -10,6 +10,11 @@ export const Container = styled.div`
   flex-direction: column;
 `;
 
+export const ContentPagination = styled.div`
+  width: 500px !important;
+  max-width: 500px !important;
+`;
+
 export const SendAssessment = styled.button`
   padding: 15px;
   width: 100%;
@@ -17,3 +22,5 @@ export const SendAssessment = styled.button`
   text-decoration: underline;
   font-size: 17px;
 `;
+
+

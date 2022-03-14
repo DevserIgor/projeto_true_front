@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import AssessmentForm from "./AssessmentForm";
 import AssessmentHeader from "./AssessmentHeader/AssessmentHeader";
 import AssessmentItem from "./AssessmentItem";
 import { createRandom, getDataRandom } from "services/AssessmentService";
-import { Container, SendAssessment } from "./styles";
+import { Container, SendAssessment, ContentPagination } from "./styles";
 import getRandomStarts from "utils/getRandomStarts";
 
 import { BallTriangle } from "react-loader-spinner";
+import Pagination from "components/Pagination";
+import moment from "moment";
 
 interface IRouteParams {
   match: {
     params: {
       productId: number;
+      page: number;
     };
   };
 }
@@ -41,10 +44,31 @@ interface IData {
   message: string;
   stars: number;
 }
+
+interface ITotalRating {
+  total: number;
+  date: Date;
+}
+
+const initialTotalRating: ITotalRating = {
+  total: Math.round(Math.random() * 1000),
+  date: new Date(),
+};
+
 const AssessmentIframe: React.FC<IRouteParams> = ({ match }) => {
-  const { productId } = match.params;
+  const STORAGE_KEY = "@TRUE_COMMERCE_AVALIACOES";
+  const { productId, page } = match.params;
+
+  const [totalRating, setTotalRating] = useState<ITotalRating>(() => {
+    const totalRatingString = localStorage.getItem(
+      `${STORAGE_KEY}:dateRating_${productId}`
+    );
+    return  totalRatingString ? JSON.parse(totalRatingString || "") : initialTotalRating;
+  });
+  
   const [average, setAverage] = useState(getRandomStarts());
-  const [amount, setAmount] = useState(Math.round(Math.random() * 1000));
+  const [amount, setAmount] = useState(totalRating.total);
+  const [pageNumber, setPage] = useState(page);
 
   const [formOpened, setFormOpened] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -75,27 +99,62 @@ const AssessmentIframe: React.FC<IRouteParams> = ({ match }) => {
     setIsLoading(false);
 
     setFormOpened(false);
+
+    
+    
+    // setTotalRating({
+    //   total: 1,
+    //   date: moment(new Date()),
+    // });
   };
+  
+  // let dateNow = moment("2022-03-16T10:10:04.222Z");
+  // let dateRating = moment(totalRating.date);
+  // let duration = dateNow.diff(dateRating, "days");
+  // if (duration >=1) {
+  //   setTotalRating({
+  //     total: totalRating.total + 5,
+  //     date: moment(new Date()).toDate(),
+  //   });
+  // }
+  
+
+  useEffect(() => {
+    localStorage.setItem(
+      `${STORAGE_KEY}:dateRating_${productId}`,
+      JSON.stringify(totalRating)
+    );
+  }, [productId, totalRating]);
+  
   return (
-    <Container>
-      <AssessmentHeader amountAssessments={amount} average={average} />
-      {isFetching ? (
-        <BallTriangle color="#1d1d1d" height={50} width={50} />
-      ) : (
-        data?.map((item: Assessment) => <AssessmentItem {...item} />)
-      )}
-      {!formOpened && (
-        <SendAssessment onClick={() => setFormOpened(!formOpened)}>
-          Enviar Avaliação
-        </SendAssessment>
-      )}
-      {!!formOpened && (
-        <AssessmentForm
-          isLoading={isLoading}
-          onConfirm={handleCreateAssessment}
-        />
-      )}
-    </Container>
+    <>
+      <Container>
+        <AssessmentHeader amountAssessments={amount} average={average} />
+        {!formOpened && (
+          <SendAssessment onClick={() => setFormOpened(!formOpened)}>
+            Enviar Avaliação
+          </SendAssessment>
+        )}
+        {!!formOpened && (
+          <AssessmentForm
+            isLoading={isLoading}
+            onConfirm={handleCreateAssessment}
+          />
+        )}
+        {isFetching ? (
+          <BallTriangle color="#1d1d1d" height={50} width={50} />
+        ) : (
+          data?.map((item: Assessment) => <AssessmentItem {...item} />)
+        )}
+        <ContentPagination>
+          <Pagination 
+            total={10 || 0}
+            current={page}
+            onChangePage={(page: number) => setPage(page)}
+          />
+        </ContentPagination>
+      </Container>
+    </>
   );
 };
 

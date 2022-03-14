@@ -6,7 +6,7 @@ import StarIframe from "pages/StarIframe";
 
 const PublicRoutes: React.FC = () => (
   <>
-    <Route path="/assessments-iframe/:productId" exact component={AssessmenIframe} />
+    <Route path="/assessments-iframe/:productId/:page?" exact component={AssessmenIframe} />
     <Route path="/random-stars" component={StarIframe} />
   </>
 );
