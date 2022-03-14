@@ -1,10 +1,18 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
-export const Container = styled.input`
-    width: 100%;
+export const Container = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+`;
 
-    margin: 7px 0;
-    padding: 10px;
+export const InputContainer = styled.input`
+  width: 100%;
+  margin: 7px 0;
+  padding: 10px;
+  border-radius: 5px;
+`;
 
-    border-radius: 5px;
+export const Label = styled.label`
+  color: ${(props) => props.theme.colors.pagination};
 `;

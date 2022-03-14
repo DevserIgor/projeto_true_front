@@ -1,15 +1,14 @@
 import React from "react";
-import CheckBoxSwitch from "../CheckboxSwitch";
-import InputCheckbox from "../InputCheckbox";
-import Toggle from "../Toggle";
-
-import { CnpjName, Container } from "./styles";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
+import { CnpjName, Container, ButtonContainer, ButtonItem } from "./styles";
 
 interface ICardListItemProps {
   cnpj: string;
   name: string;
   domain: string;
   active: boolean;
+  onEdit: Function;
+  onTrash: Function;
 }
 
 const CardListItem: React.FC<ICardListItemProps> = ({
@@ -17,6 +16,8 @@ const CardListItem: React.FC<ICardListItemProps> = ({
   name,
   domain,
   active,
+  onEdit,
+  onTrash,
 }) => (
   <Container>
     <div>
@@ -25,9 +26,22 @@ const CardListItem: React.FC<ICardListItemProps> = ({
       </CnpjName>
       <small>{domain}</small>
     </div>
-    <span>
-      <CheckBoxSwitch checked={active} onChange={() => { }} />
-    </span>
+    <ButtonContainer>
+      <ButtonItem
+        onClick={() => {
+          if (onEdit) onEdit();
+        }}
+      >
+        <FiEdit2 size={20} />
+      </ButtonItem>
+      <ButtonItem
+        onClick={() => {
+          if (onTrash) onTrash();
+        }}
+      >
+        <FiTrash2 size={20} />
+      </ButtonItem>
+    </ButtonContainer>
   </Container>
 );
 
